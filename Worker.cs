@@ -11,6 +11,19 @@ namespace DocumentFlowService
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            var service = new DocumentTemplateService();
+
+            var values = new Dictionary<string, string>
+            {
+                ["FullName"] = "Иванов Иван Иванович",
+                ["LastnameFO"] = "Иванов И.И.",
+                ["Datetime"] = DateTime.Now.ToString("dd.MM.yyyy")
+            };
+
+            var result = service.FillTemplate(@"F:\TestTemplate.docx", values);
+
+            File.WriteAllBytes(@"F:\TestTemplate_Готовое.docx", result);
+
             while (!stoppingToken.IsCancellationRequested)
             {
                 if (_logger.IsEnabled(LogLevel.Information))
